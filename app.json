@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "animatedflatlistitem",
+    "name": "Scroll Animated Llist Item",
     "slug": "animatedflatlistitem",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.devsourcecubes.animatedflatlistitem",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {

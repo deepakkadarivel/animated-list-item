@@ -1,10 +1,18 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { FlatList, StyleSheet, Text, View, Image } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Animated,
+} from "react-native";
 import faker from "faker";
 
 const IMAGE_SIZE = 60;
 const SPACING = 20;
+const ITEM_SIZE = IMAGE_SIZE + SPACING * 3;
 const BACKGROUND_IMAGE =
   "https://images.pexels.com/photos/2552418/pexels-photo-2552418.jpeg?cs=srgb&dl=pexels-lisa-fotios-2552418.jpg&fm=jpg";
 
@@ -20,6 +28,8 @@ const list = [...Array(30).keys()].map((_, i) => ({
 }));
 
 export default function App() {
+  const scrollY = React.useRef(new Animated.Value(0)).current;
+
   return (
     <View style={styles.container}>
       <Image
@@ -28,7 +38,7 @@ export default function App() {
         blurRadius={50}
         opacity=".6"
       />
-      <FlatList
+      <Animated.FlatList
         data={list}
         keyExtractor={(item) => item.key}
         showsVerticalScrollIndicator={false}
@@ -36,9 +46,43 @@ export default function App() {
           padding: SPACING,
           paddingTop: StatusBar.currentHeight || 42,
         }}
-        renderItem={({ item }) => {
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: { y: scrollY },
+              },
+            },
+          ],
+          { useNativeDriver: true }
+        )}
+        renderItem={({ item, index }) => {
+          const inputRange = [
+            -1,
+            0,
+            ITEM_SIZE * index,
+            ITEM_SIZE * (index + 2),
+          ];
+
+          const opacityInputRange = [
+            -1,
+            0,
+            ITEM_SIZE * index,
+            ITEM_SIZE * (index + 1),
+          ];
+
+          const scale = scrollY.interpolate({
+            inputRange,
+            outputRange: [1, 1, 1, 0],
+          });
+
+          const opacity = scrollY.interpolate({
+            inputRange: opacityInputRange,
+            outputRange: [1, 1, 1, 0],
+          });
+
           return (
-            <View
+            <Animated.View
               style={{
                 flexDirection: "row",
                 marginBottom: SPACING,
@@ -52,7 +96,12 @@ export default function App() {
                 },
                 shadowOpacity: 0.3,
                 shadowRadius: 10,
-                opacity: 0.8,
+                opacity,
+                transform: [
+                  {
+                    scale,
+                  },
+                ],
               }}
             >
               <Image
@@ -81,7 +130,7 @@ export default function App() {
                   {item.email}
                 </Text>
               </View>
-            </View>
+            </Animated.View>
           );
         }}
       />
