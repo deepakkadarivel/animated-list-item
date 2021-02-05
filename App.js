@@ -40,22 +40,25 @@ export default function App() {
       />
       <Animated.FlatList
         data={list}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: {
+                  y: scrollY,
+                },
+              },
+            },
+          ],
+          { useNativeDriver: true }
+        )}
+        scrollEventThrottle={1}
         keyExtractor={(item) => item.key}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           padding: SPACING,
           paddingTop: StatusBar.currentHeight || 42,
         }}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: { y: scrollY },
-              },
-            },
-          ],
-          { useNativeDriver: true }
-        )}
         renderItem={({ item, index }) => {
           const inputRange = [
             -1,
@@ -120,13 +123,19 @@ export default function App() {
                   flexWrap: "no-wrap",
                 }}
               >
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                <Text
+                  numberOfLines={1}
+                  style={{ fontSize: 18, fontWeight: "bold" }}
+                >
                   {item.name}
                 </Text>
-                <Text style={{ fontSize: 16, opacity: 0.6 }}>
+                <Text numberOfLines={1} style={{ fontSize: 14, opacity: 0.6 }}>
                   {item.jobTitile}
                 </Text>
-                <Text style={{ fontSize: 16, color: "#00CC1D" }}>
+                <Text
+                  numberOfLines={1}
+                  style={{ fontSize: 12, color: "#00CC1D" }}
+                >
                   {item.email}
                 </Text>
               </View>
