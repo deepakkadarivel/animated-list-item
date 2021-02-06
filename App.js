@@ -1,18 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Animated,
-} from "react-native";
+import { StyleSheet, Text, View, Image, Animated } from "react-native";
 import faker from "faker";
 
 const IMAGE_SIZE = 60;
 const SPACING = 20;
-const ITEM_SIZE = IMAGE_SIZE + SPACING * 3;
+const ITEM_HEIGHT = 100;
+const ITEM_SIZE = ITEM_HEIGHT + SPACING;
 const BACKGROUND_IMAGE =
   "https://images.pexels.com/photos/2552418/pexels-photo-2552418.jpeg?cs=srgb&dl=pexels-lisa-fotios-2552418.jpg&fm=jpg";
 
@@ -35,8 +29,8 @@ export default function App() {
       <Image
         source={{ uri: BACKGROUND_IMAGE }}
         style={StyleSheet.absoluteFillObject}
-        blurRadius={50}
-        opacity=".6"
+        blurRadius={40}
+        opacity={0.5}
       />
       <Animated.FlatList
         data={list}
@@ -87,6 +81,8 @@ export default function App() {
           return (
             <Animated.View
               style={{
+                height: ITEM_HEIGHT,
+                alignItems: "center",
                 flexDirection: "row",
                 marginBottom: SPACING,
                 borderRadius: 12,
@@ -99,6 +95,7 @@ export default function App() {
                 },
                 shadowOpacity: 0.3,
                 shadowRadius: 10,
+                elevation: 4,
                 opacity,
                 transform: [
                   {
@@ -120,7 +117,7 @@ export default function App() {
                 style={{
                   flex: 1,
                   flexDirection: "column",
-                  flexWrap: "no-wrap",
+                  flexWrap: "nowrap",
                 }}
               >
                 <Text
